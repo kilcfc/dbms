@@ -1,0 +1,25 @@
+create database prac3;
+use prac3;
+
+create table studmark(rollno int primary key,name varchar(20),marks int,branch varchar(20));
+insert into studmark(rollno,name,marks,branch)values(1,'ravi',90,'computer'),(2,'vedika',70,'computer'),(3,'aarush',95,'IT'),(4,'janvi',60,'IT');
+
+create table studinfo(rollno int primary key, name varchar(20), address varchar(20));
+insert into studinfo(rollno,name,address)values(1,'ravi','nashik'),(2,'vedika','nashik'),(5,'tushar','pune'),(6,'varsha','mumbai');
+
+select *from studmark where marks > 70;
+select *from studmark where marks < 70;
+select *from studmark where marks = 70 and name = 'vedika';
+
+update studmark set name = 'sachin' where name = 'ravi';
+delete from studmark where name = 'aarush';
+
+select max(marks) as maximum,min(marks) as minimum,avg(marks)as average,sum(marks) as sumof ,count(*)as totalcount from studmark;
+
+select m.rollno , m.name , m.marks , s.address from studmark m inner join studinfo s on m.rollno = s.rollno; 
+
+select m.rollno , m.name , m.marks , s.address from studmark m  left join studinfo s on m.rollno = s.rollno;
+
+select m.rollno, m.name, m.marks, s.address from studmark m right join studinfo s on m.rollno = s.rollno;
+
+select m.rollno , m.name , m.marks , s.address from studmark m  left join studinfo s on m.rollno = s.rollno union select m.rollno, m.name, m.marks, s.address from studmark m right join studinfo s on m.rollno = s.rollno;
