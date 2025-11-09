@@ -1,0 +1,26 @@
+create database prac1;
+use prac1;
+
+create table customer(accno int primary key, name varchar(20),balance int, city varchar(20));
+insert into customer(accno,name,balance,city)values(1,"ram",10000,"pune"),(2,"ravi",25000,"nashik"),(3,"sachin",30000,"mumbai");
+
+create table loan(loanno int primary key,name varchar(20),amount int);
+insert into loan(loanno,name,amount)values(1,"ram",10000),(2,"ravi",50000),(3,"dipak",40000);
+
+select name from customer where name in (select name from loan);
+select name from customer UNION select name from loan;
+select name from customer where name not in (select name from loan);
+
+create view view1 AS select name from customer where balance > 20000;
+select *from view1;
+
+create view view2 AS select name from customer where balance > 20000 AND city = "nashik";
+select *from view2;
+
+create index idx1 on customer(name);
+create index i2 on customer(accno,name);
+
+select *from customer order by balance ASC;
+select *from loan order by amount desc;
+
+create view view3 as select name , amount , (amount *20 *0.4) as interest from loan;
