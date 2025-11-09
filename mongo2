@@ -1,0 +1,50 @@
+use footballDB;
+
+// ✅ 1️⃣ Group by position & calculate total goals
+db.players.aggregate([
+  { $group: { _id: "$pos", totalGoals: { $sum: "$goals" } } }
+]);
+
+// ✅ 2️⃣ Avg goals per position
+db.players.aggregate([
+  { $group: { _id: "$pos", avgGoals: { $avg: "$goals" } } }
+]);
+
+// ✅ 3️⃣ Count number of players in each position
+db.players.aggregate([
+  { $group: { _id: "$pos", playerCount: { $count: {} } } }
+]);
+
+// ✅ 4️⃣ Sort players by goals (High → Low)
+db.players.aggregate([
+  { $sort: { goals: -1 } }
+]);
+
+// ✅ 5️⃣ Filter first | most goal scorers (Top 2)
+db.players.aggregate([
+  { $sort: { goals: -1 } },
+  { $limit: 2 }
+]);
+use footballDB;
+
+// See existing index
+db.players.getIndexes();
+
+// ✅ 1️⃣ Create index on jersey number (unique)
+db.players.createIndex({ jersey: 1 }, { unique: true });
+
+// ✅ 2️⃣ Create index on goals (descending index)
+db.players.createIndex({ goals: -1 });
+
+// ✅ 3️⃣ Compound Index: search by position + goals fast
+db.players.createIndex({ pos: 1, goals: -1 });
+
+// ✅ 4️⃣ Search using indexed field (fast lookup)
+db.players.find({ jersey: 7 });
+
+// ✅ 5️⃣ Remove an index (example)
+db.players.dropIndex({ goals: -1 });
+
+// ✅ 6️⃣ Check all indexes again
+db.players.getIndexes();
+
