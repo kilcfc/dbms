@@ -1,0 +1,28 @@
+delimiter //
+mysql>
+mysql> create procedure circlep()
+-> begin
+-> declare radius int;
+-> declare diameter int;
+-> declare area float;
+-> declare circumference float;
+-> declare pi float default 3.14;
+->
+-> set radius:=5;
+->
+-> cloop: LOOP
+-> set diameter:= 2*radius;
+-> set area:= pi*radius*radius;
+-> set circumference:=2*pi*radius;
+->
+-> select radius,diameter,area,circumference;
+-> insert into circle1(radius,area,diameter,circumference)
+values (radius, area, diameter,circumference);
+-> set radius=radius+1;
+-> if radius>9 then
+-> leave cloop;
+-> end if;
+->
+-> END LOOP cloop;
+-> end;
+-> // delimiter ;
