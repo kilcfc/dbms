@@ -1,0 +1,7 @@
+CREATE TRIGGER Make_audit1
+-> AFTER DELETE ON lib_book
+-> FOR EACH ROW
+-> BEGIN
+-> INSERT INTO lib_Audit (bid, bname, qty)
+-> VALUES(old.bid,old.bname,old.qty)
+end;
