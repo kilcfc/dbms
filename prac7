@@ -1,0 +1,28 @@
+DELIMITER //
+mysql>
+mysql> CREATE PROCEDURE mycursor1()
+-> BEGIN
+-> DECLARE done INT DEFAULT 0;
+-> DECLARE c_rollno INT;
+-> DECLARE c_name CHAR(20);
+->
+-> DECLARE c_studentN CURSOR FOR
+-> SELECT rollno, name
+-> FROM O_RollCall
+-> WHERE rollno NOT IN (SELECT rollno FROM N_RollCall);
+->
+-> DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+->
+-> OPEN c_studentN;
+-> read_loop: LOOP
+-> FETCH c_studentN INTO c_rollno, c_name;
+->
+-> IF done = 1 THEN
+-> LEAVE read_loop;
+-> END IF;
+->
+-> INSERT INTO N_RollCall (rollno, name)
+-> VALUES (c_rollno, c_name);
+-> END LOOP;
+-> CLOSE c_studentN;
+-> END;
