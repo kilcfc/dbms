@@ -1,0 +1,28 @@
+DELIMITER //
+mysql>
+mysql> CREATE PROCEDURE p_fine(IN rno INT, IN bname VARCHAR(20))
+BEGIN
+ DECLARE d1 DATE;
+ DECLARE daycnt INT;
+ DECLARE fine_amt INT;
+
+ SELECT DOI INTO d1
+ FROM Borrower
+ WHERE Roll_no = rno AND NameofBook = bname
+ LIMIT 1;
+
+ SELECT DATEDIFF(NOW(), d1) INTO daycnt;
+
+ IF (daycnt >= 15 AND daycnt <= 30) THEN
+ SET fine_amt = daycnt * 5;
+ INSERT INTO Fine(Roll_no, sDate, Amt) VALUES (rno, NOW(), fine_amt);
+ UPDATE Borrower SET Status = 'R' WHERE Roll_no = rno;
+ ELSEIF (daycnt > 30) THEN
+ SET fine_amt = daycnt * 50;
+ INSERT INTO Fine(Roll_no, sDate, Amt) VALUES (rno, NOW(), fine_amt);
+ UPDATE Borrower SET Status = 'R' WHERE Roll_no = rno;
+ ELSE
+ UPDATE Borrower SET Status = 'R' WHERE Roll_no = rno;
+ END IF;
+ END;
+ //
