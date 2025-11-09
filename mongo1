@@ -1,0 +1,61 @@
+// ✅ Switch to database (created automatically on first insert)
+use footballDB;
+
+// ✅ Insert Multiple Documents
+db.players.insertMany([
+    { name: "Ronaldo", jersey: 7, goals: 25, pos: "ST" },
+    { name: "Messi", jersey: 10, goals: 30, pos: "RW" },
+    { name: "Benzema", jersey: 9, goals: 20, pos: "ST" },
+    { name: "Modric", jersey: 10, goals: 8, pos: "CM" },
+    { name: "Kante", jersey: 13, goals: 5, pos: "CM" }
+]);
+
+// ✅ READ – Find All Players
+db.players.find().pretty();
+
+// ✅ READ With Logical Operators (AND)
+db.players.find({
+    $and: [
+        { goals: { $gt: 10 } },
+        { pos: "ST" }
+    ]
+}).pretty();
+
+// ✅ READ With Logical Operators (OR)
+db.players.find({
+    $or: [
+        { goals: { $gt: 20 } },
+        { pos: "CM" }
+    ]
+}).pretty();
+
+// ✅ READ Using NOT
+db.players.find({
+    goals: { $not: { $gte: 10 } }
+}).pretty();
+
+// ✅ READ Using IN
+db.players.find({
+    pos: { $in: ["ST", "RW"] }
+}).pretty();
+
+// ✅ UPDATE One Player's Goals
+db.players.updateOne(
+    { name: "Benzema" },
+    { $set: { goals: 22 } }
+);
+
+// ✅ UPDATE Many (Increase goals for all STs)
+db.players.updateMany(
+    { pos: "ST" },
+    { $inc: { goals: 3 } }
+);
+
+// ✅ DELETE One Document
+db.players.deleteOne({ name: "Kante" });
+
+// ✅ DELETE Many (Remove all with goals < 10)
+db.players.deleteMany({ goals: { $lt: 10 } });
+
+// ✅ Display Final Result
+db.players.find().pretty();
